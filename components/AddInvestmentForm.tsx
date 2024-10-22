@@ -110,7 +110,7 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
           <Label htmlFor="annually">Annually</Label>
         </div>
       </RadioGroup>
-      <div className="flex space-x-4">
+      <div className="sm:flex flex-col sm:flex-row gap-3">
         <div className="flex-1">
           <Label>Start Date</Label>
           <Popover>
