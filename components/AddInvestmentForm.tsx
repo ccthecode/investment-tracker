@@ -22,7 +22,7 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(undefined)
   // const [interestType, setInterestType] = useState('compound')
-  // Explicitly define the type of interestType
+  // const [investmentType, setInvestmentType] = useState('annually')
   const [interestType, setInterestType] = useState<'simple' | 'compound'>('compound');
   const [investmentType, setInvestmentType] = useState<'daily' | 'annually'>('annually')
 
@@ -111,7 +111,7 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
           required
         />
       </div>
-      <RadioGroup value={investmentType} onValueChange={setInvestmentType}>
+      <RadioGroup value={investmentType} onValueChange={(value)=>setInvestmentType(value as 'daily' | 'annually')}>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="daily" id="daily" />
           <Label htmlFor="daily">Daily</Label>
@@ -173,7 +173,7 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
           </Popover>
         </div>
       </div>
-      <RadioGroup value={interestType} onValueChange={setInterestType}>
+      <RadioGroup value={interestType} onValueChange={(value)=>setInterestType(value as 'simple' | 'compound')}>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="compound" id="compound" />
           <Label htmlFor="compound">Compound Interest</Label>
