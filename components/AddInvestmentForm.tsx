@@ -21,8 +21,10 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
   const [rate, setRate] = useState('')
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(undefined)
-  const [interestType, setInterestType] = useState('compound')
-  const [investmentType, setInvestmentType] = useState('annually')
+  // const [interestType, setInterestType] = useState('compound')
+  // Explicitly define the type of interestType
+  const [interestType, setInterestType] = useState<'simple' | 'compound'>('compound');
+  const [investmentType, setInvestmentType] = useState<'daily' | 'annually'>('annually')
 
   const calculateReturn = () => {
     if (!startDate || !endDate) return '0.00'
