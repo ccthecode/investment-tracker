@@ -12,11 +12,16 @@ export default function Home() {
     setInvestments([...investments, investment])
   }
 
+  const handleDeleteInvestment = (index: number) => {
+    setInvestments((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return (
     <main className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-8">Investment Tracker</h1>
       <AddInvestmentForm onAddInvestment={addInvestment} />
-      <InvestmentList investments={investments} />
+    
+      <InvestmentList investments={investments} onDeleteInvestment={handleDeleteInvestment} />
     </main>
   )
 }

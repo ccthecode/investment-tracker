@@ -8,7 +8,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, RotateCwIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Investment } from '@/types'
 
@@ -51,6 +51,8 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
     return expectedReturn.toFixed(2)
   }
 
+  
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!startDate || !endDate) return
@@ -64,29 +66,16 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
       expectedReturn: parseFloat(calculateReturn())
     }
     onAddInvestment(newInvestment)
-    // setPrincipal('')
-    // setRate('')
-    // setStartDate(undefined)
-    // setEndDate(undefined)
-    // setInterestType('compound')
-    // setInvestmentType('annually')
   }
 
-  const handlePrincipalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/,/g, ''); // Remove commas before saving to state
-    setPrincipal(value);
-  };
-  
-  // Function to format the principal with commas
-  const formatNumber = (number: string | number) => {
-    return parseFloat(number as string).toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  };
-  
-  
-
+  const resetInputFields = () => {
+    setPrincipal('')
+    setRate('')
+    setStartDate(undefined)
+    setEndDate(undefined)
+    setInterestType('compound')
+    setInvestmentType('annually')
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mb-8">
@@ -183,7 +172,13 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
           <Label htmlFor="simple">Simple Interest</Label>
         </div>
       </RadioGroup>
-      <Button type="submit">Add Investment</Button>
+      <div className="flex align-middle gap-4">
+        <Button  className='bg-green-600 hover:bg-green-500' type="submit">Add Investment</Button>
+        <Button variant={'default'} onClick={resetInputFields} type="reset">
+          <RotateCwIcon className="mr-2 h-4 w-4" />
+          <span>Clear Inputs</span>  
+        </Button>
+      </div>
     </form>
   )
 }
