@@ -11,12 +11,17 @@ import { format } from "date-fns"
 import { CalendarIcon, RotateCwIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Investment } from '@/types'
+import { Toaster } from "@/components/ui/toaster"
+import { useToast } from "@/hooks/use-toast"
 
 type AddInvestmentFormProps = {
   onAddInvestment: (investment: Investment) => void
 }
 
 export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentFormProps) {
+  const { toast } = useToast()
+
+  // const [toastMessage, setToast]
   const [principal, setPrincipal] = useState('')
   const [rate, setRate] = useState('')
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
@@ -66,6 +71,11 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
       expectedReturn: parseFloat(calculateReturn())
     }
     onAddInvestment(newInvestment)
+
+    toast({
+      title: `At maturity, (${endDate.toLocaleDateString()}), you would have made: ${calculateReturn()}`,
+      description: `See full breakdown at the bottom of the page`,
+    })
   }
 
   const resetInputFields = () => {
@@ -79,6 +89,7 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mb-8">
+      <Toaster/>
       <div>
         <Label htmlFor="principal">Principal Amount</Label>
         <Input
