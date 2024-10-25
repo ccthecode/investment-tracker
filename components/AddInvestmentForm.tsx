@@ -243,7 +243,7 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
         <Button className='bg-green-600 hover:bg-green-500' type="submit">Add Investment</Button>
         <Button variant={'default'} onClick={resetInputFields} type="reset">
           <RotateCwIcon className="mr-2 h-4 w-4" />
-          <span>Clear Inputs</span>  
+          <span>Reset Inputs</span>  
         </Button>
       </div>
     </form>
