@@ -1,34 +1,80 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Investment Tracker
 
-## Getting Started
+## Overview
 
-First, run the development server:
+Investment Tracker is a web application that allows users to calculate and track their investments, supporting both simple and compound interest calculations. The app provides a user-friendly interface for adding investments, selecting currencies, and viewing a list of tracked investments.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+While using this app, you will get a great insight into the power of compounding and how a simple reinvestment strategy greatly differs monetarily from a simple interest investments. Enjoy!  
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Add investments with customizable parameters:
+  - Principal amount
+  - Interest rate
+  - Start and end dates
+  - Interest type (simple or compound)
+  - Investment type (daily or annually)
+  - Currency selection with flags
+- Calculate expected returns based on input parameters
+- View a list of all added investments
+- Delete investments from the list
+- Responsive design for various screen sizes
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Technologies Used
 
-## Learn More
+- React
+- Next.js
+- TypeScript
+- Tailwind CSS
+- shadcn/ui components
+- date-fns for date manipulation
 
-To learn more about Next.js, take a look at the following resources:
+## Setup Instructions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clone the repository:
+   ```
+   git clone https://github.com/ccthecode/investment-tracker.git
+   cd investment-tracker
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-## Deploy on Vercel
+3. Run the development server:
+   ```
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Open your browser and navigate to `http://localhost:3000` to view the application.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Usage
+
+1. **Adding an Investment**
+   - Fill in the investment details in the form:
+     - Principal amount
+     - Select currency
+     - Interest rate
+     - Choose investment type (daily or annually)
+     - Select start and end dates (if applicable)
+     - Choose interest type (simple or compound)
+   - Click "Add Investment" to add it to your list
+
+2. **Viewing Investments**
+   - Scroll down to see the table of all added investments
+   - The table displays all relevant information, including expected returns
+
+3. **Deleting an Investment**
+   - Click the "X" button in the "Action" column to remove an investment from the list
+
+4. **Customizing Investment Period**
+   - For annual investments, you can toggle the "Select Investment Period less than 365 days" switch to customize the investment period
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License.
