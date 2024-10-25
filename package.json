@@ -2,6 +2,10 @@
   "name": "ivt",
   "version": "1.0.0",
   "private": true,
+  "author": {
+    "name": "ccthecode",
+    "url": "https://github.com/ccthecode"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
