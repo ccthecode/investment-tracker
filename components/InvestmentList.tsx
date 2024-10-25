@@ -8,18 +8,22 @@ import {
 } from "@/components/ui/table"
 import { Investment } from '@/types'
 import { Button } from "@/components/ui/button"
-import { X } from 'lucide-react';
+import { X } from 'lucide-react'
+import { differenceInDays } from 'date-fns'
 
 type InvestmentListProps = {
   investments: Investment[]
-  onDeleteInvestment: (index: number) => void // Function to handle delete
+  onDeleteInvestment: (index: number) => void
 }
 
-const handleDeleteInvestment = (index: number) => {
-  setInvestments((prev) => prev.filter((_: any, i: number) => i !== index));
-};
-
 export default function InvestmentList({ investments, onDeleteInvestment }: InvestmentListProps) {
+  const calculateDays = (startDate: Date | undefined, endDate: Date | undefined) => {
+    if (startDate && endDate) {
+      return differenceInDays(endDate, startDate)
+    }
+    return 365 // Default to 365 days if dates are not provided
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -28,9 +32,11 @@ export default function InvestmentList({ investments, onDeleteInvestment }: Inve
           <TableHead>Rate (%)</TableHead>
           <TableHead>Start Date</TableHead>
           <TableHead>End Date</TableHead>
+          <TableHead>Days</TableHead>
           <TableHead>Interest Type</TableHead>
           <TableHead>Investment Type</TableHead>
           <TableHead>Expected Return</TableHead>
+          <TableHead>Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -38,18 +44,19 @@ export default function InvestmentList({ investments, onDeleteInvestment }: Inve
           <TableRow key={index}>
             <TableCell>{investment.principal.toLocaleString()}</TableCell>
             <TableCell>{investment.rate.toFixed(2)}%</TableCell>
-            <TableCell>{investment.startDate.toLocaleDateString()}</TableCell>
-            <TableCell>{investment.endDate.toLocaleDateString()}</TableCell>
+            <TableCell>{investment.startDate?.toLocaleDateString()}</TableCell>
+            <TableCell>{investment.endDate?.toLocaleDateString()}</TableCell>
+            <TableCell>{calculateDays(investment.startDate, investment.endDate)}</TableCell>
             <TableCell>{investment.interestType}</TableCell>
             <TableCell>{investment.investmentType}</TableCell>
             <TableCell>{investment.expectedReturn.toLocaleString()}</TableCell>
             <TableCell>
-            <Button 
-            variant={"destructive"}
-                onClick={() => onDeleteInvestment(index)} // Call delete function with index
-                className="w-1"
+              <Button 
+                variant="destructive"
+                onClick={() => onDeleteInvestment(index)}
+                className="w-8 h-8 p-0"
               >
-                <X/>
+                <X size={16} />
               </Button>
             </TableCell>
           </TableRow>
@@ -57,8 +64,4 @@ export default function InvestmentList({ investments, onDeleteInvestment }: Inve
       </TableBody>
     </Table>
   )
-}
-
-function setInvestments(arg0: (prev: any) => any) {
-  throw new Error("Function not implemented.")
 }

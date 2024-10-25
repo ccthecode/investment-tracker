@@ -7,12 +7,13 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { format } from "date-fns"
+import { format, differenceInDays } from "date-fns"
 import { CalendarIcon, RotateCwIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Investment } from '@/types'
 import { Toaster } from "@/components/ui/toaster"
 import { useToast } from "@/hooks/use-toast"
+import { Switch } from '@/components/ui/switch'
 
 type AddInvestmentFormProps = {
   onAddInvestment: (investment: Investment) => void
@@ -21,46 +22,47 @@ type AddInvestmentFormProps = {
 export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentFormProps) {
   const { toast } = useToast()
 
-  // const [toastMessage, setToast]
   const [principal, setPrincipal] = useState('')
   const [rate, setRate] = useState('')
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(undefined)
-  // const [interestType, setInterestType] = useState('compound')
-  // const [investmentType, setInvestmentType] = useState('annually')
-  const [interestType, setInterestType] = useState<'simple' | 'compound'>('compound');
+  const [interestType, setInterestType] = useState<'simple' | 'compound'>('compound')
   const [investmentType, setInvestmentType] = useState<'daily' | 'annually'>('annually')
+  const [useCustomPeriod, setUseCustomPeriod] = useState(false)
 
   const calculateReturn = () => {
-    if (!startDate || !endDate) return '0.00'
     const principalAmount = parseFloat(principal)
     const ratePercentage = parseFloat(rate) / 100
-    const maturityDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
+    let maturityDays = 365 // Default to 365 days for annual investments
 
-    let expectedReturn
+    if (startDate && endDate) {
+      maturityDays = differenceInDays(endDate, startDate)
+    }
 
-    if (investmentType === 'annually') {
-      if (interestType === 'compound') {
-        expectedReturn = principalAmount * Math.pow(1 + ratePercentage, maturityDays / 365) - principalAmount
-      } else {
-        expectedReturn = principalAmount * ratePercentage * (maturityDays / 365)
-      }
-    } else {
-      if (interestType === 'compound') {
-        expectedReturn = principalAmount * Math.pow(1 + ratePercentage, maturityDays) - principalAmount
-      } else {
-        expectedReturn = principalAmount * ratePercentage * (maturityDays)
-      }
+    const years = maturityDays / 365
+
+    let expectedReturn: number
+
+    if (interestType === 'compound') {
+      expectedReturn = principalAmount * Math.pow(1 + ratePercentage, years) - principalAmount
+    } else { // simple interest
+      expectedReturn = principalAmount * ratePercentage * years
     }
 
     return expectedReturn.toFixed(2)
   }
 
-  
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!startDate || !endDate) return
+    if ((investmentType === 'daily' || useCustomPeriod) && (!startDate || !endDate)) {
+      toast({
+        title: "Error",
+        description: "Please select both start and end dates for daily investments or custom periods.",
+        variant: "destructive",
+      })
+      return
+    }
+
     const newInvestment: Investment = {
       principal: parseFloat(principal),
       rate: parseFloat(rate),
@@ -73,8 +75,8 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
     onAddInvestment(newInvestment)
 
     toast({
-      title: `At maturity, (${endDate.toLocaleDateString()}), you would have made: ${calculateReturn()}`,
-      description: `See full breakdown at the bottom of the page`,
+      title: `Investment Added`,
+      description: `At maturity (${endDate ? format(endDate, 'PP') : 'after 365 days'}), you would have made: $${parseFloat(calculateReturn()).toLocaleString()}`,
     })
   }
 
@@ -85,6 +87,7 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
     setEndDate(undefined)
     setInterestType('compound')
     setInvestmentType('annually')
+    setUseCustomPeriod(false)
   }
 
   return (
@@ -111,17 +114,32 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
           required
         />
       </div>
-      <RadioGroup value={investmentType} onValueChange={(value)=>setInvestmentType(value as 'daily' | 'annually')}>
+      <RadioGroup value={investmentType} onValueChange={(value) => {
+        setInvestmentType(value as 'daily' | 'annually')
+        setUseCustomPeriod(false)
+      }}>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="daily" id="daily" />
           <Label htmlFor="daily">Daily</Label>
         </div>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="annually" id="annually" />
-          <Label htmlFor="annually">Annually</Label>
+          <Label htmlFor="annually">Annually (365 days)</Label>
         </div>
       </RadioGroup>
-      <div className="sm:flex flex-col sm:flex-row gap-3">
+
+      {investmentType === 'annually' && (
+        <div className="flex items-center space-x-2">
+          <Switch
+            checked={useCustomPeriod}
+            onCheckedChange={setUseCustomPeriod}
+            id="custom-period"
+          />
+          <Label htmlFor="custom-period">Select Investment Period less than 365 days</Label>
+        </div>
+      )}
+      
+      <div className={cn("sm:flex flex-col sm:flex-row gap-3", investmentType === 'annually' && !useCustomPeriod && "pointer-events-none opacity-50")}>
         <div className="flex-1">
           <Label>Start Date</Label>
           <Popover>
@@ -184,7 +202,7 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
         </div>
       </RadioGroup>
       <div className="flex align-middle gap-4">
-        <Button  className='bg-green-600 hover:bg-green-500' type="submit">Add Investment</Button>
+        <Button className='bg-green-600 hover:bg-green-500' type="submit">Add Investment</Button>
         <Button variant={'default'} onClick={resetInputFields} type="reset">
           <RotateCwIcon className="mr-2 h-4 w-4" />
           <span>Clear Inputs</span>  
