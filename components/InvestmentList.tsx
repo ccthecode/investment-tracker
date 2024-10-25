@@ -29,6 +29,7 @@ export default function InvestmentList({ investments, onDeleteInvestment }: Inve
       <TableHeader>
         <TableRow>
           <TableHead>Principal</TableHead>
+          <TableHead>Currency</TableHead>
           <TableHead>Rate (%)</TableHead>
           <TableHead>Start Date</TableHead>
           <TableHead>End Date</TableHead>
@@ -43,13 +44,14 @@ export default function InvestmentList({ investments, onDeleteInvestment }: Inve
         {investments.map((investment, index) => (
           <TableRow key={index}>
             <TableCell>{investment.principal.toLocaleString()}</TableCell>
+            <TableCell>{investment.currency}</TableCell>
             <TableCell>{investment.rate.toFixed(2)}%</TableCell>
             <TableCell>{investment.startDate?.toLocaleDateString()}</TableCell>
             <TableCell>{investment.endDate?.toLocaleDateString()}</TableCell>
             <TableCell>{calculateDays(investment.startDate, investment.endDate)}</TableCell>
             <TableCell>{investment.interestType}</TableCell>
             <TableCell>{investment.investmentType}</TableCell>
-            <TableCell>{investment.expectedReturn.toLocaleString()}</TableCell>
+            <TableCell>{investment.expectedReturn.toLocaleString()} {investment.currency}</TableCell>
             <TableCell>
               <Button 
                 variant="destructive"

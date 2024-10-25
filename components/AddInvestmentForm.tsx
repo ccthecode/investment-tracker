@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { format, differenceInDays } from "date-fns"
 import { CalendarIcon, RotateCwIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -19,6 +20,20 @@ type AddInvestmentFormProps = {
   onAddInvestment: (investment: Investment) => void
 }
 
+type Currency = {
+  code: string
+  name: string
+  flag: string
+}
+
+const currencies: Currency[] = [
+  { code: 'USD', name: 'US Dollar', flag: '🇺🇸' },
+  { code: 'NGN', name: 'Nigerian Naira', flag: '🇳🇬' },
+  { code: 'EUR', name: 'Euro', flag: '🇪🇺' },
+  { code: 'GBP', name: 'British Pound', flag: '🇬🇧' },
+  { code: 'JPY', name: 'Japanese Yen', flag: '🇯🇵' },
+]
+
 export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentFormProps) {
   const { toast } = useToast()
 
@@ -29,6 +44,7 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
   const [interestType, setInterestType] = useState<'simple' | 'compound'>('compound')
   const [investmentType, setInvestmentType] = useState<'daily' | 'annually'>('annually')
   const [useCustomPeriod, setUseCustomPeriod] = useState(false)
+  const [currency, setCurrency] = useState<Currency>(currencies[0])
 
   const calculateReturn = () => {
     const principalAmount = parseFloat(principal)
@@ -70,13 +86,14 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
       endDate,
       interestType,
       investmentType,
-      expectedReturn: parseFloat(calculateReturn())
+      expectedReturn: parseFloat(calculateReturn()),
+      currency: currency.code,
     }
     onAddInvestment(newInvestment)
 
     toast({
       title: `Investment Added`,
-      description: `At maturity (${endDate ? format(endDate, 'PP') : 'after 365 days'}), you would have made: $${parseFloat(calculateReturn()).toLocaleString()}`,
+      description: `At maturity (${endDate ? format(endDate, 'PP') : 'after 365 days'}), you would have made: ${currency.flag} ${currency.code} ${parseFloat(calculateReturn()).toLocaleString()}`,
     })
   }
 
@@ -88,20 +105,41 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
     setInterestType('compound')
     setInvestmentType('annually')
     setUseCustomPeriod(false)
+    setCurrency(currencies[0])
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mb-8">
       <Toaster/>
-      <div>
-        <Label htmlFor="principal">Principal Amount</Label>
-        <Input
-          id="principal"
-          type="number"
-          value={principal}
-          onChange={(e) => setPrincipal(e.target.value)}
-          required
-        />
+      <div className="flex gap-4">
+        <div className="flex-1">
+          <Label htmlFor="principal">Principal Amount</Label>
+          <Input
+            id="principal"
+            type="number"
+            value={principal}
+            onChange={(e) => setPrincipal(e.target.value)}
+            required
+          />
+        </div>
+        <div className="w-40">
+          <Label htmlFor="currency">Currency</Label>
+          <Select value={currency.code} onValueChange={(value) => setCurrency(currencies.find(c => c.code === value) || currencies[0])}>
+            <SelectTrigger id="currency">
+              <SelectValue placeholder="Select currency" />
+            </SelectTrigger>
+            <SelectContent>
+              {currencies.map((c) => (
+                <SelectItem key={c.code} value={c.code}>
+                  <span className="flex items-center">
+                    <span className="mr-2">{c.flag}</span>
+                    {c.code} - {c.name}
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <div>
         <Label htmlFor="rate">Interest Rate (%)</Label>

@@ -1,9 +1,10 @@
 export type Investment = {
   principal: number
   rate: number
-  startDate: Date | undefined
-  endDate: Date | undefined
+  startDate?: Date
+  endDate?: Date
   interestType: 'simple' | 'compound'
   investmentType: 'daily' | 'annually'
   expectedReturn: number
+  currency: string
 }
