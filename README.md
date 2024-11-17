@@ -66,7 +66,7 @@ While using this app, you will get a great insight into the power of compounding
    - The table displays all relevant information, including expected returns
 
 3. **Deleting an Investment**
-   - Click the "X" button in the "Action" column to remove an investment from the list
+   - Click the "X" button in the last column to remove an investment from the list
 
 4. **Customizing Investment Period**
    - For annual investments, you can toggle the "Select Investment Period less than 365 days" switch to customize the investment period

@@ -44,6 +44,12 @@ export default function AddInvestmentForm({ onAddInvestment }: AddInvestmentForm
   const [investmentType, setInvestmentType] = useState<'daily' | 'annually'>('annually')
   const [currency, setCurrency] = useState<Currency>(currencies[0])
 
+  useEffect(() => {
+    if (investmentType === 'annually') {
+      setEndDate(addDays(startDate || new Date(), 365))
+    }
+  }, [investmentType, startDate])
+
   const calculateReturn = () => {
     const principalAmount = parseFloat(principal)
     const ratePercentage = parseFloat(rate) / 100

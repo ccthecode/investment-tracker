@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Table,
   TableBody,
@@ -26,6 +28,7 @@ export default function InvestmentList({ investments, onDeleteInvestment }: Inve
 
   return (
     <Table>
+      {investments.length > 0 &&
       <TableHeader>
         <TableRow>
           <TableHead>Principal</TableHead>
@@ -40,6 +43,7 @@ export default function InvestmentList({ investments, onDeleteInvestment }: Inve
           <TableHead></TableHead>
         </TableRow>
       </TableHeader>
+      }
       <TableBody>
         {investments.map((investment, index) => (
           <TableRow key={index}>
