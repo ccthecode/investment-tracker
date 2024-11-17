@@ -17,8 +17,11 @@ export default function Home() {
   };
 
   return (
-    <main className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-8">Investment Tracker</h1>
+    <main className="container mx-auto px-4 py-10">
+      <div className='mb-8 max-w-lg'>
+        <h1 className="text-3xl font-bold mb-4">Investment Tracker</h1>
+        <p>Calculate and track your investments, supporting both simple and compound interest calculations.</p>
+      </div>
       <AddInvestmentForm onAddInvestment={addInvestment} />    
       <InvestmentList investments={investments} onDeleteInvestment={handleDeleteInvestment} />
     </main>

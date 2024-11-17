@@ -37,7 +37,7 @@ export default function InvestmentList({ investments, onDeleteInvestment }: Inve
           <TableHead>Interest Type</TableHead>
           <TableHead>Investment Type</TableHead>
           <TableHead>Expected Return</TableHead>
-          <TableHead>Action</TableHead>
+          <TableHead></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
