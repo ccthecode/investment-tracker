@@ -1,5 +1,8 @@
 # Investment Tracker
 
+## Demo
+[https://ivtracker.vercel.app/](https://ivtracker.vercel.app)
+
 ## Overview
 
 Investment Tracker is a web application that allows users to calculate and track their investments, supporting both simple and compound interest calculations. The app provides a user-friendly interface for adding investments, selecting currencies, and viewing a list of tracked investments.
