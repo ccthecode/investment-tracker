@@ -20,7 +20,8 @@ const Nav = () => {
     <div>
       <nav className='flex justify-between items-center mb-5'>
           <div className='flex items-center gap-4'>
-            <Image alt='investment tracker app logo' unoptimized src="/ivt.png" width={30} height={30}/>
+ 
+        <Image priority alt='investment tracker app logo' unoptimized src="/ivt.png" width={30} height={30}/>
             <h1 className="text-2xl font-bold">Investment Tracker</h1>
           </div>
           <div className='logos flex items-center gap-4'>                
